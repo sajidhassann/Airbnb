@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
 import {View, Text, ScrollView, TextInput, ImageBackground} from 'react-native';
 import Styles from '../StyleSheet';

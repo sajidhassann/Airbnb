@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
 import {View, Text, TouchableHighlight} from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Styles from '../style/StyleSheet';
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
+import Styles from '../StyleSheet';
 import * as Animatable from 'react-native-animatable';
 class TabMiddleButton extends Component {
   render() {
@@ -14,11 +15,7 @@ class TabMiddleButton extends Component {
         <View style={Styles.recipe_button_round}>
           <TouchableHighlight>
             <View>
-              <MaterialCommunityIcons
-                color="white"
-                name="format-list-bulleted"
-                size={30}
-              />
+              <FontAwesome color="white" name="airbnb" size={30} />
             </View>
           </TouchableHighlight>
         </View>

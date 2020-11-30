@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -6,8 +7,8 @@ import {
   TextInput,
   ImageBackground,
   FlatList,
+  Pressable,
 } from 'react-native';
-import Styles from '../StyleSheet';
 import PlacesView from '../components/PlacesView';
 import SpotsView from '../components/SpotsView';
 import ExperianceTabView from '../components/ExperianceTabView';
@@ -29,29 +30,29 @@ const places_miles = [
   '1.5 hour drive',
 ];
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-const Home = () => {
+const Home = ({navigation: {navigate}}) => {
   const mapPlacesData = ({item, index}) => {
     return (
-      <View>
+      <Pressable onPress={() => navigate('Gallery')}>
         <PlacesView places_name={item} places_miles={places_miles[index]} />
-      </View>
+      </Pressable>
     );
   };
   const mapSpotsData = ({item, index}) => {
     return (
-      <View>
+      <Pressable onPress={() => navigate('Gallery')}>
         <SpotsView places_name={item} />
-      </View>
+      </Pressable>
     );
   };
   const mapExperianceData = ({item, index}) => {
     return (
-      <View>
+      <Pressable onPress={() => navigate('Gallery')}>
         <ExperianceTabView
           places_name={item}
           places_miles={places_miles[index]}
         />
-      </View>
+      </Pressable>
     );
   };
   return (

@@ -1,65 +1,52 @@
 /* eslint-disable prettier/prettier */
+import Axios from 'axios';
 import React, {useEffect, useState} from 'react';
-import {PermissionsAndroid} from 'react-native';
-import CameraRoll from '@react-native-community/cameraroll';
 import PhotoBrowser from 'react-native-photo-browser';
 
-const Gallery = () => {
-  const [state, setState] = useState({selected: new Set()});
+const Gallery = ({navigation: {navigate}}) => {
+  const [state, setState] = useState({
+    selected: new Set(),
+    media: [
+      {id: 10, photo: 'http://placeimg.com/640/480/any'},
+      {id: 11, photo: 'http://placeimg.com/640/480/any'},
+      {id: 12, photo: 'http://placeimg.com/640/480/any'},
+      {id: 13, photo: 'http://placeimg.com/640/480/any'},
+      {id: 14, photo: 'http://placeimg.com/640/480/any'},
+      {id: 15, photo: 'http://placeimg.com/640/480/any'},
+      {id: 16, photo: 'http://placeimg.com/640/480/any'},
+      {id: 17, photo: 'http://placeimg.com/640/480/any'},
+      {id: 18, photo: 'http://placeimg.com/640/480/any'},
+      {id: 19, photo: 'http://placeimg.com/640/480/any'},
+    ],
+  });
+  const getImages = async () => {
+    try {
+      const res = await Axios.get(
+        'https://picsum.photos/v2/list?limit=11&page=3',
+      );
+      setState({
+        ...state,
+        media: res?.data?.map((img) => ({
+          id: Number(img.id),
+          photo: img.download_url,
+        })),
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    const requestExternalStoreageRead = async () => {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          {
-            title: 'Airbnb',
-            message: 'App needs access to external storage',
-          },
-        );
-        try {
-          const data = await CameraRoll.getPhotos({
-            first: 100,
-            assetType: 'Photos',
-          });
-
-          const media = [];
-          data.edges.forEach((d) =>
-            media.push({
-              photo: d.node.image.uri,
-            }),
-          );
-          setState({...state, media});
-        } catch (error) {
-          console.error(error);
-        }
-        console.log(granted);
-        return granted == PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        return false;
-      }
-    };
-
-    requestExternalStoreageRead();
+    getImages();
+    return () => {};
   }, []);
 
-  const onSelectionChanged = (media, index, selected) => {
-    const copy = new Set(state.selected);
-    if (selected) {
-      copy.add(index);
-    } else {
-      copy.delete(index);
-    }
-    setState({...state, selected: copy});
-  };
   return (
     <PhotoBrowser
       mediaList={state.media}
-      style={{backgroundColor: 'white'}}
-      displayNavArrows={true}
-      displaySelectionButtons={true}
       startOnGrid={true}
-      onSelectionChanged={onSelectionChanged}
+      displayTopBar={false}
+      alwaysDisplayStatusBar={false}
       customTitle={(index, rowCount) => `${index} sur ${rowCount}`}
     />
   );
