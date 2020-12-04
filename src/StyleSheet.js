@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import {StyleSheet} from 'react-native';
-export default Styles = StyleSheet.create({
+export default StyleSheet.create({
   body: {
     flex: 1,
   },
