@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
 import {
@@ -30,6 +31,8 @@ const places_miles = [
   '1.5 hour drive',
 ];
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import StickyParallaxHeader from 'react-native-sticky-parallax-header';
+
 const Home = ({navigation: {navigate}}) => {
   const mapPlacesData = ({item, index}) => {
     return (
@@ -56,32 +59,15 @@ const Home = ({navigation: {navigate}}) => {
     );
   };
   return (
-    <ScrollView
-      //   stickyHeaderIndices={[1,3]}
-      showsVerticalScrollIndicator={false}
-      style={{backgroundColor: '#000'}}>
-      <Text
-        style={{
-          color: '#fff',
-          marginTop: 20,
-          marginBottom: 15,
-          alignSelf: 'center',
-          textDecorationLine: 'underline',
-        }}>
-        Get the latest on our COVID-19 response
-      </Text>
-      <View
-        style={{
-          backgroundColor: '#fff',
-          borderTopLeftRadius: 30,
-          borderTopRightRadius: 30,
-          overflow: 'hidden',
-        }}>
-        <ImageBackground
-          source={require('../assets/images/pic.jpg')}
-          style={{
-            height: 450,
-          }}>
+    <StickyParallaxHeader
+      transparentHeader={true}
+      parallaxHeight={450}
+      leftTopIcon={null}
+      rightTopIcon={null}
+      backgroundColor="transparent"
+      backgroundImage={require('../assets/images/pic.jpg')}
+      foreground={() => (
+        <>
           <View
             style={{
               position: 'absolute',
@@ -133,89 +119,94 @@ const Home = ({navigation: {navigate}}) => {
               <Text>Explore nearby stays</Text>
             </View>
           </View>
-        </ImageBackground>
-        <View
-          style={{
-            justifyContent: 'center',
-            paddingTop: 20,
-            paddingBottom: 10,
-          }}>
-          <ScrollView
-            horizontal
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}>
+        </>
+      )}
+      renderBody={() => (
+        <>
+          <View
+            style={{
+              justifyContent: 'center',
+              paddingTop: 20,
+              paddingBottom: 10,
+            }}>
+            <ScrollView
+              horizontal
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}>
+              <FlatList
+                numColumns={Math.ceil(places_name.length / 2)}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                data={places_name}
+                renderItem={mapPlacesData}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </ScrollView>
+          </View>
+          <View
+            style={{
+              justifyContent: 'center',
+              paddingTop: 20,
+              paddingBottom: 20,
+            }}>
+            <Text
+              style={{
+                paddingLeft: 20,
+                marginBottom: 20,
+                fontSize: 24,
+                fontWeight: 'bold',
+              }}>
+              Live anywhere
+            </Text>
             <FlatList
-              numColumns={Math.ceil(places_name.length / 2)}
+              horizontal={true}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
               data={places_name}
-              renderItem={mapPlacesData}
+              renderItem={mapSpotsData}
               keyExtractor={(item, index) => index.toString()}
             />
-          </ScrollView>
-        </View>
-        <View
-          style={{
-            justifyContent: 'center',
-            paddingTop: 20,
-            paddingBottom: 20,
-          }}>
-          <Text
+          </View>
+          <View
             style={{
-              paddingLeft: 20,
-              marginBottom: 20,
-              fontSize: 24,
-              fontWeight: 'bold',
+              justifyContent: 'center',
+              paddingTop: 20,
+              backgroundColor: '#000',
+              paddingBottom: 20,
             }}>
-            Live anywhere
-          </Text>
-          <FlatList
-            horizontal={true}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            data={places_name}
-            renderItem={mapSpotsData}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
-        <View
-          style={{
-            justifyContent: 'center',
-            paddingTop: 20,
-            backgroundColor: '#000',
-            paddingBottom: 20,
-          }}>
-          <Text
-            style={{
-              paddingLeft: 20,
-              marginBottom: 10,
-              fontSize: 24,
-              color: '#fff',
-              fontWeight: 'bold',
-            }}>
-            Experiance the world
-          </Text>
-          <Text
-            style={{
-              paddingLeft: 20,
-              marginBottom: 20,
-              color: '#fff',
-              fontSize: 16,
-              lineHeight: 18,
-            }}>
-            Unique activities with local experts -- in{'\n'}person or online
-          </Text>
-          <FlatList
-            horizontal={true}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            data={places_name}
-            renderItem={mapExperianceData}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
-      </View>
-    </ScrollView>
+            <Text
+              style={{
+                paddingLeft: 20,
+                marginBottom: 10,
+                fontSize: 24,
+                color: '#fff',
+                fontWeight: 'bold',
+              }}>
+              Experiance the world
+            </Text>
+            <Text
+              style={{
+                paddingLeft: 20,
+                marginBottom: 20,
+                color: '#fff',
+                fontSize: 16,
+                lineHeight: 18,
+              }}>
+              Unique activities with local experts -- in{'\n'}person or online
+            </Text>
+            <FlatList
+              horizontal={true}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              data={places_name}
+              renderItem={mapExperianceData}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </View>
+        </>
+      )}
+      headerType="DetailsHeader"
+    />
   );
 };
 export default Home;
