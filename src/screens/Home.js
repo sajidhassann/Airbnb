@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
 import {
@@ -8,6 +9,10 @@ import {
   ImageBackground,
   FlatList,
   Pressable,
+  Dimensions,
+  Platform,
+  StyleSheet,
+  StatusBar,
 } from 'react-native';
 import PlacesView from '../components/PlacesView';
 import SpotsView from '../components/SpotsView';
@@ -30,6 +35,16 @@ const places_miles = [
   '1.5 hour drive',
 ];
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ReactNativeParallaxHeader from 'react-native-parallax-header';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+
+const {height: SCREEN_HEIGHT} = Dimensions.get('window');
+
+const IS_IPHONE_X = SCREEN_HEIGHT === 812 || SCREEN_HEIGHT === 896;
+const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? (IS_IPHONE_X ? 44 : 20) : 0;
+const HEADER_HEIGHT = Platform.OS === 'ios' ? (IS_IPHONE_X ? 88 : 64) : 59;
+const NAV_BAR_HEIGHT = HEADER_HEIGHT - STATUS_BAR_HEIGHT;
+
 const Home = ({navigation: {navigate}}) => {
   const mapPlacesData = ({item, index}) => {
     return (
@@ -55,85 +70,37 @@ const Home = ({navigation: {navigate}}) => {
       </Pressable>
     );
   };
-  return (
-    <ScrollView
-      //   stickyHeaderIndices={[1,3]}
-      showsVerticalScrollIndicator={false}
-      style={{backgroundColor: '#000'}}>
-      <Text
-        style={{
-          color: '#fff',
-          marginTop: 20,
-          marginBottom: 15,
-          alignSelf: 'center',
-          textDecorationLine: 'underline',
-        }}>
-        Get the latest on our COVID-19 response
-      </Text>
+
+  const renderNavBar = () => (
+    <View style={styles.navContainer}>
       <View
         style={{
-          backgroundColor: '#fff',
-          borderTopLeftRadius: 30,
-          borderTopRightRadius: 30,
-          overflow: 'hidden',
+          backgroundColor: 'lightgrey',
+          borderRadius: 30,
+          width: '80%',
+          height: '100%',
+          // marginTop: 20,
+          alignSelf: 'center',
+          paddingLeft: 20,
+          paddingRight: 20,
+          marginBottom: 20,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}>
-        <ImageBackground
-          source={require('../assets/images/pic.jpg')}
-          style={{
-            height: 450,
-          }}>
-          <View
-            style={{
-              position: 'absolute',
-              width: '100%',
-              top: 0,
-              height: 50,
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                backgroundColor: '#fff',
-                borderRadius: 30,
-                width: '80%',
-                height: '100%',
-                marginTop: 20,
-                paddingLeft: 20,
-                paddingRight: 20,
-                marginBottom: 20,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <MaterialCommunityIcons name="magnify" size={20} color="red" />
-              <TextInput
-                style={{marginLeft: 5}}
-                placeholder="Where are you going?"
-                placeholderTextColor="#000"
-              />
-            </View>
-          </View>
-          <View
-            style={{
-              width: '50%',
-              height: '100%',
-              justifyContent: 'center',
-              paddingLeft: 20,
-            }}>
-            <Text style={{fontSize: 70, fontWeight: 'bold', color: '#fff'}}>
-              Go{'\n'}Near
-            </Text>
-            <View
-              style={{
-                backgroundColor: '#fff',
-                padding: 10,
-                alignItems: 'center',
-                borderRadius: 10,
-                marginTop: 20,
-              }}>
-              <Text>Explore nearby stays</Text>
-            </View>
-          </View>
-        </ImageBackground>
+        <MaterialCommunityIcons name="magnify" size={20} color="red" />
+        <TextInput
+          style={{marginLeft: 5}}
+          placeholder="Where are you going?"
+          placeholderTextColor="#000"
+        />
+      </View>
+    </View>
+  );
+
+  const renderContent = () => {
+    return (
+      <View style={{zIndex: 1}}>
         <View
           style={{
             justifyContent: 'center',
@@ -215,7 +182,160 @@ const Home = ({navigation: {navigate}}) => {
           />
         </View>
       </View>
-    </ScrollView>
+    );
+  };
+
+  const title = () => {
+    return (
+      <>
+        <Text
+          style={{
+            color: '#fff',
+            backgroundColor: 'black',
+            // marginTop: 10,
+            // marginBottom: 15,
+            paddingTop: 10,
+            paddingBottom: 10,
+            alignSelf: 'center',
+            textDecorationLine: 'underline',
+            width: '100%',
+            textAlign: 'center',
+          }}>
+          Get the latest on our COVID-19 response
+        </Text>
+        <View
+          style={{
+            // backgroundColor: '#fff',
+            borderTopLeftRadius: 30,
+            borderTopRightRadius: 30,
+            overflow: 'hidden',
+            width: '100%',
+          }}>
+          <ImageBackground
+            source={require('../assets/images/pic.jpg')}
+            style={{
+              height: 410,
+            }}>
+            {/* <View
+            style={{
+              position: 'absolute',
+              width: '100%',
+              top: 0,
+              height: 50,
+              alignItems: 'center',
+            }}> */}
+            <View
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: 30,
+                width: '80%',
+                height: 50,
+                marginTop: 20,
+                paddingLeft: 20,
+                paddingRight: 20,
+                // marginBottom: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                alignSelf: 'center',
+              }}>
+              <MaterialCommunityIcons name="magnify" size={20} color="red" />
+              <TextInput
+                style={{marginLeft: 5}}
+                placeholder="Where are you going?"
+                placeholderTextColor="#000"
+              />
+            </View>
+            {/* </View> */}
+            <View
+              style={{
+                width: '50%',
+                height: '100%',
+                justifyContent: 'center',
+                paddingLeft: 20,
+              }}>
+              <Text style={{fontSize: 70, fontWeight: 'bold', color: '#fff'}}>
+                Go{'\n'}Near
+              </Text>
+              <View
+                style={{
+                  backgroundColor: '#fff',
+                  padding: 10,
+                  alignItems: 'center',
+                  borderRadius: 10,
+                  marginTop: 20,
+                }}>
+                <Text>Explore nearby stays</Text>
+              </View>
+            </View>
+          </ImageBackground>
+        </View>
+      </>
+    );
+  };
+
+  return (
+    <>
+      <ReactNativeParallaxHeader
+        headerMinHeight={HEADER_HEIGHT}
+        headerMaxHeight={450}
+        extraScrollHeight={20}
+        navbarColor="white"
+        statusBarColor="black"
+        backgroundColor="black"
+        alwaysShowNavBar={false}
+        alwaysShowTitle={false}
+        titleStyle={styles.titleStyle}
+        title={title()}
+        // extraScrollHeight={40}
+        // backgroundImage={require('../assets/images/pic.jpg')}
+        // titleStyle={{zIndex: -1}}
+        backgroundImageScale={1.2}
+        renderNavBar={renderNavBar}
+        renderContent={renderContent}
+        containerStyle={styles.container}
+        contentContainerStyle={styles.contentContainer}
+        innerContainerStyle={styles.container}
+        // scrollEventThrottle={2000}
+        scrollViewProps={{
+          onScrollBeginDrag: () => console.log('onScrollBeginDrag'),
+          onScrollEndDrag: () => console.log('onScrollEndDrag'),
+        }}
+      />
+    </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  contentContainer: {
+    flexGrow: 1,
+    zIndex: 1,
+  },
+  navContainer: {
+    height: HEADER_HEIGHT,
+    // marginHorizontal: 10,
+    backgroundColor: 'white',
+    paddingVertical: 10,
+  },
+  statusBar: {
+    height: STATUS_BAR_HEIGHT,
+    backgroundColor: 'transparent',
+  },
+  navBar: {
+    height: NAV_BAR_HEIGHT,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: 'transparent',
+  },
+  titleStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 18,
+    zIndex: -1,
+  },
+});
 export default Home;
