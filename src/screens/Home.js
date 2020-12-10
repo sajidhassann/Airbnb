@@ -52,18 +52,8 @@ const Home = ({navigation: {navigate}}) => {
   const HEIGHT_MIN = 100;
   const HEIGHT_DIFFERENCE = HEIGHT_MAX - HEIGHT_MIN;
   const opacityValue = scrollY.interpolate({
-    inputRange: [0, 40, 60],
-    outputRange: [0, 1, 0],
-    extrapolate: 'clamp',
-  });
-  const slowOpacityValue = scrollY.interpolate({
-    inputRange: [50, 60, 110],
-    outputRange: [0, 0.5, 1],
-    extrapolate: 'clamp',
-  });
-  const counterOpacityValue = scrollY.interpolate({
-    inputRange: [50, 60, 110],
-    outputRange: [1, 0.5, 0],
+    inputRange: [0, HEIGHT_DIFFERENCE / 2, HEIGHT_DIFFERENCE],
+    outputRange: [0, 1, 1],
     extrapolate: 'clamp',
   });
   const mapPlacesData = ({item, index}) => {
@@ -92,32 +82,67 @@ const Home = ({navigation: {navigate}}) => {
   };
 
   return (
+    // <View>
+    //   <ScrollView
+    //     //   stickyHeaderIndices={[1,3]}
+    //     showsVerticalScrollIndicator={false}
+    //     style={{backgroundColor: '#000'}}
+    //     scrollEventThrottle={16}
+    //     onScroll={Animated.event([
+    //       {nativeEvent: {contentOffset: {y: scrollY}}},
+    //     ])}>
+    //     {/* <StatusBar backgroundColor={opacityValue == 0 ? '#fff' : '#000'} /> */}
+    //     <View
+    //       style={{
+    //         backgroundColor: '#fff',
+    //         // borderTopLeftRadius: 30,
+    //         // borderTopRightRadius: 30,
+    //         // overflow: 'hidden',
+    //       }}>
+    //       <ImageBackground
+    //         source={require('../assets/images/pic.jpg')}
+    //         style={{
+    //           height: 450,
+    //         }}>
+    //         <View
+    //           style={{
+    //             width: '50%',
+    //             height: '100%',
+    //             justifyContent: 'center',
+    //             paddingLeft: 20,
+    //           }}>
+    //           <Text style={{fontSize: 70, fontWeight: 'bold', color: '#fff'}}>
+    //             Go{'\n'}Near
+    //           </Text>
+    //           <View
+    //             style={{
+    //               backgroundColor: '#fff',
+    //               padding: 10,
+    //               alignItems: 'center',
+    //               borderRadius: 10,
+    //               marginTop: 20,
+    //             }}>
+    //             <Text>Explore nearby stays</Text>
+    //           </View>
+    //         </View>
+    //       </ImageBackground>
     <View style={{flex: 1, backgroundColor: 'black'}}>
       <ImageHeaderScrollView
         scrollEventThrottle={16}
-        minimumZoomScale={0}
-        maximumZoomScal={100}
-        minOverlayOpacity={0}
-        maxOverlayOpacity={0.9}
-        overlayColor="white"
-        fadeOutForeground={true}
-        onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: scrollY}}}],
-          {useNativeDriver: false},
-        )}
+        onScroll={Animated.event([
+          {nativeEvent: {contentOffset: {y: scrollY}}},
+        ])}
         maxHeight={MAX_HEIGHT}
         minHeight={MIN_HEIGHT}
-        headerImage={require('../assets/images/pic.jpg')}
         renderForeground={() => (
           <>
-            <Animated.View
+            <View
               style={{
                 backgroundColor: '#fff',
                 borderRadius: 30,
                 width: '80%',
                 // height: '100%',
                 zIndex: -4,
-                opacity: counterOpacityValue,
                 marginTop: '19%',
                 marginLeft: '10%',
                 paddingLeft: 20,
@@ -133,7 +158,7 @@ const Home = ({navigation: {navigate}}) => {
                 placeholder="Where are you going?"
                 placeholderTextColor="#000"
               />
-            </Animated.View>
+            </View>
             <Animated.View
               delay={1000}
               style={{
@@ -141,7 +166,7 @@ const Home = ({navigation: {navigate}}) => {
                 width: '100%',
                 top: '15.3%',
                 height: 60,
-                zIndex: 0,
+                // zIndex: ,
                 alignItems: 'center',
                 opacity: opacityValue,
                 backgroundColor: '#fff',
@@ -150,7 +175,7 @@ const Home = ({navigation: {navigate}}) => {
             />
           </>
         )}
-        renderFixedForeground={() => (
+        renderHeader={() => (
           <>
             <View style={{backgroundColor: 'black'}}>
               <Text
@@ -163,10 +188,10 @@ const Home = ({navigation: {navigate}}) => {
                 }}>
                 Get the latest on our COVID-19 response
               </Text>
-              {/* <ImageBackground
+              <ImageBackground
                 source={require('../assets/images/pic.jpg')}
-                style={styles.image}> */}
-              {/* <View
+                style={styles.image}>
+                {/* <View
                 style={{
                   // position: 'absolute',
                   width: '100%',
@@ -201,28 +226,29 @@ const Home = ({navigation: {navigate}}) => {
                 </View>
               </View> */}
 
-              <View
-                style={{
-                  width: '50%',
-                  height: '100%',
-                  justifyContent: 'center',
-                  paddingLeft: 20,
-                }}>
-                <Text style={{fontSize: 70, fontWeight: 'bold', color: '#fff'}}>
-                  Go{'\n'}Near
-                </Text>
                 <View
                   style={{
-                    backgroundColor: '#fff',
-                    padding: 10,
-                    alignItems: 'center',
-                    borderRadius: 10,
-                    marginTop: 20,
+                    width: '50%',
+                    height: '100%',
+                    justifyContent: 'center',
+                    paddingLeft: 20,
                   }}>
-                  <Text>Explore nearby stays</Text>
+                  <Text
+                    style={{fontSize: 70, fontWeight: 'bold', color: '#fff'}}>
+                    Go{'\n'}Near
+                  </Text>
+                  <View
+                    style={{
+                      backgroundColor: '#fff',
+                      padding: 10,
+                      alignItems: 'center',
+                      borderRadius: 10,
+                      marginTop: 20,
+                    }}>
+                    <Text>Explore nearby stays</Text>
+                  </View>
                 </View>
-              </View>
-              {/* </ImageBackground> */}
+              </ImageBackground>
             </View>
           </>
         )}>
@@ -362,7 +388,7 @@ const Home = ({navigation: {navigate}}) => {
           zIndex: 61,
           height: 60,
           elevation: 9,
-          opacity: slowOpacityValue,
+          opacity: opacityValue,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
@@ -396,7 +422,7 @@ const Home = ({navigation: {navigate}}) => {
           height: 60,
           zIndex: 60,
           alignItems: 'center',
-          opacity: slowOpacityValue,
+          opacity: opacityValue,
           backgroundColor: '#fff',
           justifyContent: 'center',
           elevation: 8,
