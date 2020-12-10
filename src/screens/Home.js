@@ -37,8 +37,13 @@ const Home = ({navigation: {navigate}}) => {
   const HEIGHT_MIN = 100;
   const HEIGHT_DIFFERENCE = HEIGHT_MAX - HEIGHT_MIN;
   const opacityValue = scrollY.interpolate({
-    inputRange: [0, HEIGHT_DIFFERENCE / 2, HEIGHT_DIFFERENCE],
+    inputRange: [0, HEIGHT_DIFFERENCE / 1.8, HEIGHT_DIFFERENCE],
     outputRange: [0, 1, 1],
+    extrapolate: 'clamp',
+  });
+  const topValue = scrollY.interpolate({
+    inputRange: [0, HEIGHT_DIFFERENCE/5.8],
+    outputRange: [50, 0],
     extrapolate: 'clamp',
   });
   const mapPlacesData = ({item, index}) => {
@@ -75,13 +80,23 @@ const Home = ({navigation: {navigate}}) => {
         onScroll={Animated.event([
           {nativeEvent: {contentOffset: {y: scrollY}}},
         ])}>
+        <Text
+          style={{
+            color: '#fff',
+            alignSelf: 'center',
+            textDecorationLine: 'underline',
+            marginTop: 15,
+            marginBottom: 15,
+          }}>
+          COVID-19
+        </Text>
         {/* <StatusBar backgroundColor={opacityValue == 0 ? '#fff' : '#000'} /> */}
         <View
           style={{
             backgroundColor: '#fff',
-            // borderTopLeftRadius: 30,
-            // borderTopRightRadius: 30,
-            // overflow: 'hidden',
+            borderTopLeftRadius: 30,
+            borderTopRightRadius: 30,
+            overflow: 'hidden',
           }}>
           <ImageBackground
             source={require('../assets/images/pic.jpg')}
@@ -192,11 +207,11 @@ const Home = ({navigation: {navigate}}) => {
           </View>
         </View>
       </ScrollView>
-      <View
+      <Animated.View
         style={{
           position: 'absolute',
           width: '100%',
-          top: 0,
+          top: topValue,
           zIndex: 2,
           height: 60,
           alignItems: 'center',
@@ -223,12 +238,12 @@ const Home = ({navigation: {navigate}}) => {
             placeholderTextColor="#000"
           />
         </View>
-      </View>
+      </Animated.View>
       <Animated.View
         style={{
           position: 'absolute',
           width: '100%',
-          top: 0,
+          top: topValue,
           height: 60,
           alignItems: 'center',
           opacity: opacityValue,
