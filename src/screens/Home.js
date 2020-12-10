@@ -1,3 +1,6 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable no-unused-vars */
+/* eslint-disable prettier/prettier */
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -9,10 +12,15 @@ import {
   FlatList,
   Pressable,
   StatusBar,
+  Image,
 } from 'react-native';
 import PlacesView from '../components/PlacesView';
 import SpotsView from '../components/SpotsView';
 import ExperianceTabView from '../components/ExperianceTabView';
+import {
+  ImageHeaderScrollView,
+  TriggeringView,
+} from 'react-native-image-header-scroll-view';
 // const image = {uri: 'https://reactjs.org/logo-og.png'};
 const places_name = [
   'Nathia Gali',
@@ -32,7 +40,8 @@ const places_miles = [
 ];
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const Home = ({navigation: {navigate}}) => {
-  const [scrollY, setScrollY] = useState(new Animated.Value(0));
+  // const [scrollY, setScrollY] = useState(new Animated.Value(0));
+  const scrollY = new Animated.Value(0);
   const HEIGHT_MAX = 450;
   const HEIGHT_MIN = 100;
   const HEIGHT_DIFFERENCE = HEIGHT_MAX - HEIGHT_MIN;
@@ -41,11 +50,27 @@ const Home = ({navigation: {navigate}}) => {
     outputRange: [0, 1, 1],
     extrapolate: 'clamp',
   });
+  const fade = scrollY.interpolate({
+    inputRange: [0, HEIGHT_DIFFERENCE / 1.8, HEIGHT_DIFFERENCE],
+    outputRange: [1, 1, 0.4],
+    extrapolate: 'clamp',
+  });
   const topValue = scrollY.interpolate({
-    inputRange: [0, HEIGHT_DIFFERENCE/5.8],
+    inputRange: [0, HEIGHT_DIFFERENCE / 5.8],
     outputRange: [50, 0],
     extrapolate: 'clamp',
   });
+  const margin = scrollY.interpolate({
+    inputRange: [0, HEIGHT_DIFFERENCE / 15, HEIGHT_DIFFERENCE],
+    outputRange: [0, -30, -60],
+    extrapolate: 'clamp',
+  });
+  const color = scrollY.interpolate({
+    inputRange: [0, HEIGHT_DIFFERENCE],
+    outputRange: ['white', 'lightgrey'],
+    extrapolate: 'clamp',
+  });
+
   const mapPlacesData = ({item, index}) => {
     return (
       <Pressable onPress={() => navigate('Gallery')}>
@@ -70,61 +95,80 @@ const Home = ({navigation: {navigate}}) => {
       </Pressable>
     );
   };
+
   return (
-    <View>
-      <ScrollView
-        //   stickyHeaderIndices={[1,3]}
-        showsVerticalScrollIndicator={false}
-        style={{backgroundColor: '#000'}}
+    <>
+      <ImageHeaderScrollView
         scrollEventThrottle={16}
-        onScroll={Animated.event([
-          {nativeEvent: {contentOffset: {y: scrollY}}},
-        ])}>
-        <Text
-          style={{
-            color: '#fff',
-            alignSelf: 'center',
-            textDecorationLine: 'underline',
-            marginTop: 15,
-            marginBottom: 15,
-          }}>
-          COVID-19
-        </Text>
-        {/* <StatusBar backgroundColor={opacityValue == 0 ? '#fff' : '#000'} /> */}
-        <View
-          style={{
-            backgroundColor: '#fff',
-            borderTopLeftRadius: 30,
-            borderTopRightRadius: 30,
-            overflow: 'hidden',
-          }}>
-          <ImageBackground
-            source={require('../assets/images/pic.jpg')}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: scrollY}}}],
+          {useNativeDriver: false},
+        )}
+        renderFixedForeground={() => (
+          <View
             style={{
-              height: 450,
+              width: '50%',
+              height: '100%',
+              justifyContent: 'center',
+              paddingLeft: 20,
+              marginTop: '15%',
             }}>
+            <Text style={{fontSize: 70, fontWeight: 'bold', color: '#fff'}}>
+              Go{'\n'}Near
+            </Text>
             <View
               style={{
-                width: '50%',
-                height: '100%',
-                justifyContent: 'center',
-                paddingLeft: 20,
+                backgroundColor: '#fff',
+                padding: 10,
+                alignItems: 'center',
+                borderRadius: 10,
+                marginTop: 20,
               }}>
-              <Text style={{fontSize: 70, fontWeight: 'bold', color: '#fff'}}>
-                Go{'\n'}Near
-              </Text>
-              <View
-                style={{
-                  backgroundColor: '#fff',
-                  padding: 10,
-                  alignItems: 'center',
-                  borderRadius: 10,
-                  marginTop: 20,
-                }}>
-                <Text>Explore nearby stays</Text>
-              </View>
+              <Text>Explore nearby stays</Text>
             </View>
-          </ImageBackground>
+          </View>
+        )}
+        renderHeader={() => (
+          <Animated.View
+            style={{backgroundColor: '#000', marginTop: margin, opacity: fade}}>
+            <Text
+              style={{
+                color: '#fff',
+                alignSelf: 'center',
+                textDecorationLine: 'underline',
+                marginTop: 15,
+                marginBottom: 15,
+              }}>
+              Get the latest on our COVID-19 response
+            </Text>
+            {/* <StatusBar backgroundColor={opacityValue == 0 ? '#fff' : '#000'} /> */}
+            <View
+              style={{
+                backgroundColor: '#fff',
+                borderTopLeftRadius: 30,
+                borderTopRightRadius: 30,
+                overflow: 'hidden',
+              }}>
+              <Animated.Image
+                // resizeMethod="auto"
+                // resizeMode="cover"
+                source={require('../assets/images/pic.jpg')}
+                style={{
+                  // opacity: fade,
+                  height: HEIGHT_MAX,
+                  width: '100%',
+                }}
+              />
+            </View>
+          </Animated.View>
+        )}
+        minHeight={0}
+        maxHeight={HEIGHT_MAX}
+        overlayColor="white"
+        maxOverlayOpacity={0.8}
+        // headerImage={require('../assets/images/pic.jpg')}
+      >
+        <TriggeringView>
           <View
             style={{
               justifyContent: 'center',
@@ -205,8 +249,8 @@ const Home = ({navigation: {navigate}}) => {
               keyExtractor={(item, index) => index.toString()}
             />
           </View>
-        </View>
-      </ScrollView>
+        </TriggeringView>
+      </ImageHeaderScrollView>
       <Animated.View
         style={{
           position: 'absolute',
@@ -215,11 +259,12 @@ const Home = ({navigation: {navigate}}) => {
           zIndex: 2,
           height: 60,
           alignItems: 'center',
+          elevation: 60,
           justifyContent: 'center',
         }}>
-        <View
+        <Animated.View
           style={{
-            backgroundColor: '#fff',
+            // backgroundColor: '#fff',
             borderRadius: 30,
             width: '80%',
             height: '80%',
@@ -228,6 +273,7 @@ const Home = ({navigation: {navigate}}) => {
             paddingRight: 20,
             // marginBottom: 20,
             flexDirection: 'row',
+            backgroundColor: color,
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -237,7 +283,7 @@ const Home = ({navigation: {navigate}}) => {
             placeholder="Where are you going?"
             placeholderTextColor="#000"
           />
-        </View>
+        </Animated.View>
       </Animated.View>
       <Animated.View
         style={{
@@ -245,12 +291,25 @@ const Home = ({navigation: {navigate}}) => {
           width: '100%',
           top: topValue,
           height: 60,
+          elevation: 60,
           alignItems: 'center',
           opacity: opacityValue,
           backgroundColor: 'white',
           justifyContent: 'center',
-        }}></Animated.View>
-    </View>
+        }}
+      />
+    </>
   );
+  // return (
+  //   <View>
+  //     <ScrollView
+  //       //   stickyHeaderIndices={[1,3]}
+  //       showsVerticalScrollIndicator={false}
+  //       style={{backgroundColor: '#000'}}
+  //       </View>
+  //     </ScrollView>
+
+  //   </View>
+  // );
 };
 export default Home;
