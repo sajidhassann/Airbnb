@@ -47,7 +47,7 @@ const Home = ({navigation: {navigate}}) => {
   const HEIGHT_DIFFERENCE = HEIGHT_MAX - HEIGHT_MIN;
   const opacityValue = scrollY.interpolate({
     inputRange: [0, HEIGHT_DIFFERENCE / 1.8, HEIGHT_DIFFERENCE],
-    outputRange: [0, 1, 1],
+    outputRange: [0, 0.5, 1],
     extrapolate: 'clamp',
   });
   const fade = scrollY.interpolate({
@@ -56,13 +56,13 @@ const Home = ({navigation: {navigate}}) => {
     extrapolate: 'clamp',
   });
   const topValue = scrollY.interpolate({
-    inputRange: [0, HEIGHT_DIFFERENCE / 5.8],
-    outputRange: [50, 0],
+    inputRange: [0, HEIGHT_DIFFERENCE / 5.8, HEIGHT_DIFFERENCE],
+    outputRange: [50, 40, 0],
     extrapolate: 'clamp',
   });
   const margin = scrollY.interpolate({
     inputRange: [0, HEIGHT_DIFFERENCE / 15, HEIGHT_DIFFERENCE],
-    outputRange: [0, -30, -60],
+    outputRange: [0, -10, -70],
     extrapolate: 'clamp',
   });
   const color = scrollY.interpolate({

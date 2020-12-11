@@ -1,9 +1,7 @@
+/* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import {SafeAreaView, StatusBar} from 'react-native';
-import Gallery from './src/screens/Gallery';
-import PlacesView from './src/components/PlacesView';
-import Home from './src/screens/Home';
 import BottomTabs from './src/screens/BottomTabs';
 import {NavigationContainer} from '@react-navigation/native';
 
